@@ -1,9 +1,6 @@
-#include <cassert>
-
 #include "single-linked-list.h"
 
-// Эта функция проверяет работу класса SingleLinkedList
-void Test() {
+void Test4() {
     struct DeletionSpy {
         ~DeletionSpy() {
             if (deletion_counter_ptr) {
@@ -15,7 +12,7 @@ void Test() {
 
     // Проверка PopFront
     {
-        SingleLinkedList<int> numbers{3, 14, 15, 92, 6};
+        SingleLinkedList<int> numbers{ 3, 14, 15, 92, 6 };
         numbers.PopFront();
         assert((numbers == SingleLinkedList<int>{14, 15, 92, 6}));
 
@@ -36,7 +33,7 @@ void Test() {
         assert(++empty_list.before_begin() == empty_list.begin());
         assert(++empty_list.cbefore_begin() == const_empty_list.begin());
 
-        SingleLinkedList<int> numbers{1, 2, 3, 4};
+        SingleLinkedList<int> numbers{ 1, 2, 3, 4 };
         const auto& const_numbers = numbers;
         assert(numbers.before_begin() == numbers.cbefore_begin());
         assert(++numbers.before_begin() == numbers.begin());
@@ -55,7 +52,7 @@ void Test() {
 
         // Вставка в непустой список
         {
-            SingleLinkedList<int> lst{1, 2, 3};
+            SingleLinkedList<int> lst{ 1, 2, 3 };
             auto inserted_item_pos = lst.InsertAfter(lst.before_begin(), 123);
 
             assert(inserted_item_pos == lst.begin());
@@ -82,7 +79,8 @@ void Test() {
             if (countdown_ptr) {
                 if (*countdown_ptr == 0) {
                     throw std::bad_alloc();
-                } else {
+                }
+                else {
                     --(*countdown_ptr);
                 }
             }
@@ -98,12 +96,13 @@ void Test() {
     {
         bool exception_was_thrown = false;
         for (int max_copy_counter = 10; max_copy_counter >= 0; --max_copy_counter) {
-            SingleLinkedList<ThrowOnCopy> list{ThrowOnCopy{}, ThrowOnCopy{}, ThrowOnCopy{}};
+            SingleLinkedList<ThrowOnCopy> list{ ThrowOnCopy{}, ThrowOnCopy{}, ThrowOnCopy{} };
             try {
                 int copy_counter = max_copy_counter;
                 list.InsertAfter(list.cbegin(), ThrowOnCopy(copy_counter));
                 assert(list.GetSize() == 4u);
-            } catch (const std::bad_alloc&) {
+            }
+            catch (const std::bad_alloc&) {
                 exception_was_thrown = true;
                 assert(list.GetSize() == 3u);
                 break;
@@ -115,26 +114,26 @@ void Test() {
     // Удаление элементов после указанной позиции
     {
         {
-            SingleLinkedList<int> lst{1, 2, 3, 4};
+            SingleLinkedList<int> lst{ 1, 2, 3, 4 };
             const auto& const_lst = lst;
             const auto item_after_erased = lst.EraseAfter(const_lst.cbefore_begin());
             assert((lst == SingleLinkedList<int>{2, 3, 4}));
             assert(item_after_erased == lst.begin());
         }
         {
-            SingleLinkedList<int> lst{1, 2, 3, 4};
+            SingleLinkedList<int> lst{ 1, 2, 3, 4 };
             const auto item_after_erased = lst.EraseAfter(lst.cbegin());
             assert((lst == SingleLinkedList<int>{1, 3, 4}));
             assert(item_after_erased == (++lst.begin()));
         }
         {
-            SingleLinkedList<int> lst{1, 2, 3, 4};
+            SingleLinkedList<int> lst{ 1, 2, 3, 4 };
             const auto item_after_erased = lst.EraseAfter(++(++lst.cbegin()));
             assert((lst == SingleLinkedList<int>{1, 2, 3}));
             assert(item_after_erased == lst.end());
         }
         {
-            SingleLinkedList<DeletionSpy> list{DeletionSpy{}, DeletionSpy{}, DeletionSpy{}};
+            SingleLinkedList<DeletionSpy> list{ DeletionSpy{}, DeletionSpy{}, DeletionSpy{} };
             auto after_begin = ++list.begin();
             int deletion_counter = 0;
             after_begin->deletion_counter_ptr = &deletion_counter;
@@ -146,5 +145,5 @@ void Test() {
 }
 
 int main() {
-    Test();
+    Test4();
 }
