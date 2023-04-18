@@ -111,26 +111,14 @@ public:
     SingleLinkedList(std::initializer_list<Type> values) {
         head_.next_node = nullptr;
         size_ = values.size();
-        SingleLinkedList temp_list;
-        temp_list.size_ = values.size();
-        Node** temp = &temp_list.head_.next_node;
-        for (auto& value : values) {
-            *temp = new Node(value, nullptr);
-            temp = &((*temp)->next_node);
-        }
+        SingleLinkedList temp_list = BurnList(values);
         swap(temp_list);
     }
 
     SingleLinkedList(const SingleLinkedList& other) {
         head_.next_node = nullptr;
         size_ = other.size_;
-        SingleLinkedList temp_list;
-        temp_list.size_ = other.size_;
-        Node** temp = &temp_list.head_.next_node;
-        for (auto& value : other) {
-            *temp = new Node(value, nullptr);
-            temp = &((*temp)->next_node);
-        }
+        SingleLinkedList temp_list = BurnList(other);
         swap(temp_list);
     }
 
@@ -266,15 +254,17 @@ private:
     Node head_;
     size_t size_ = 0u;
 
-    /*
     template <typename TypeList>
-    void BurnList(const TypeList& values, SingleLinkedList list) {        
-        Node** temp = &list.head_.next_node;
-        for (auto value : values) {
+    SingleLinkedList BurnList(const TypeList& values) {
+        SingleLinkedList temp_list;
+        Node** temp = &temp_list.head_.next_node;
+        for (auto& value : values) {
             *temp = new Node(value, nullptr);
             temp = &((*temp)->next_node);
+            ++temp_list.size_;
         }
-    }*/
+        return temp_list;
+    }
 };
 
 template <typename Type>
